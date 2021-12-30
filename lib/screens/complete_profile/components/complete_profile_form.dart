@@ -1,0 +1,194 @@
+import 'package:flutter/material.dart';
+import 'package:furniture_app/arguments/otp_register_arguments.dart';
+import 'package:furniture_app/arguments/complete_profile_argument.dart';
+import 'package:furniture_app/screens/otp/otp_screen.dart';
+
+import '../../../constants.dart';
+import '../../../size_config.dart';
+import '../../../components/custom_suffix_icon.dart';
+import '../../../components/form_error.dart';
+import '../../../components/default_button.dart';
+
+class CompleteProfileForm extends StatefulWidget {
+  const CompleteProfileForm({Key? key}) : super(key: key);
+
+  @override
+  _CompleteProfileFormState createState() => _CompleteProfileFormState();
+}
+
+class _CompleteProfileFormState extends State<CompleteProfileForm> {
+  final _formKey = GlobalKey<FormState>();
+  String? firstName;
+  String? lastName;
+  String? phoneNumber;
+  String? address;
+
+  final List<String?> errors = [];
+  void addError({String? error}) {
+    if (!errors.contains(error)) {
+      setState(() {
+        errors.add(error);
+      });
+    }
+  }
+
+  void removeError({String? error}) {
+    if (errors.contains(error)) {
+      setState(() {
+        errors.remove(error);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final CompleteProfileArguments agrs =
+        ModalRoute.of(context)!.settings.arguments as CompleteProfileArguments;
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          buildFirstNameFormField(),
+          SizedBox(
+            height: getProportionateScreenHeight(30),
+          ),
+          buildLastNameFormField(),
+          SizedBox(
+            height: getProportionateScreenHeight(30),
+          ),
+          buildPhoneNumberFormField(),
+          SizedBox(
+            height: getProportionateScreenHeight(30),
+          ),
+          buildAddressFormField(),
+          FormError(errors: errors),
+          SizedBox(
+            height: getProportionateScreenHeight(40),
+          ),
+          DefaultButton(
+              text: "Continue",
+              press: () {
+                if (_formKey.currentState!.validate()) {
+                  Navigator.pushNamed(context, OtpScreen.routeName,
+                      arguments: OTPRegisterArguments(
+                          completeProfileArguments: agrs,
+                          lastName: lastName!,
+                          firstName: firstName!,
+                          phoneNumer: phoneNumber!,
+                          address: address!));
+                }
+              })
+        ],
+      ),
+    );
+  }
+
+  TextFormField buildAddressFormField() {
+    return TextFormField(
+      onSaved: (newValue) => address = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kAddressNullError);
+        }
+        address = value;
+        return null;
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          addError(error: kAddressNullError);
+          return "";
+        }
+        return null;
+      },
+      decoration: const InputDecoration(
+        labelText: "Address",
+        hintText: "Enter your address",
+        // If  you are using latest version of flutter then lable text and hint text shown like this
+        // if you r using flutter less then 1.20.* then maybe this is not working properly
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon:
+            CustomSuffixIcon(svgIcon: "assets/icons/Location point.svg"),
+      ),
+    );
+  }
+
+  TextFormField buildPhoneNumberFormField() {
+    return TextFormField(
+      keyboardType: TextInputType.number,
+      onSaved: (newValue) => phoneNumber = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kPhoneNumberNullError);
+        }
+        phoneNumber = value;
+        return null;
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          addError(error: kPhoneNumberNullError);
+          return "";
+        } else if (!phoneValidatorRegExp.hasMatch(value)) {
+          addError(error: kInvalidPhoneError);
+          return "";
+        }
+        return null;
+      },
+      decoration: const InputDecoration(
+        labelText: "Phone Number",
+        hintText: "Enter your phone number",
+        // If  you are using latest version of flutter then lable text and hint text shown like this
+        // if you r using flutter less then 1.20.* then maybe this is not working properly
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSuffixIcon(svgIcon: "assets/icons/Phone.svg"),
+      ),
+    );
+  }
+
+  TextFormField buildLastNameFormField() {
+    return TextFormField(
+      onSaved: (newValue) => lastName = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kNamelNullError);
+        }
+        lastName = value;
+      },
+      decoration: const InputDecoration(
+        labelText: "Last Name",
+        hintText: "Enter your last name",
+        // If  you are using latest version of flutter then lable text and hint text shown like this
+        // if you r using flutter less then 1.20.* then maybe this is not working properly
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSuffixIcon(svgIcon: "assets/icons/User.svg"),
+      ),
+    );
+  }
+
+  TextFormField buildFirstNameFormField() {
+    return TextFormField(
+      onSaved: (newValue) => firstName = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kFirstNameNullError);
+        }
+        firstName = value;
+        return null;
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          addError(error: kNamelNullError);
+          return "";
+        }
+        return null;
+      },
+      decoration: const InputDecoration(
+        labelText: "First Name",
+        hintText: "Enter your first name",
+        // If  you are using latest version of flutter then lable text and hint text shown like this
+        // if you r using flutter less then 1.20.* then maybe this is not working properly
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSuffixIcon(svgIcon: "assets/icons/User.svg"),
+      ),
+    );
+  }
+}
