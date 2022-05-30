@@ -1,4 +1,4 @@
-# furniture_app
+# furniture_app (9 điểm đồ án)
 
 1 app flutter(dart), kết hợp cùng web laravel <br/>
 
