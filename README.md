@@ -4,7 +4,7 @@
 
 
 chức năng đạt được : hầu hết chức năng cần thiết của 1 app bán hàng<br/>
-
+xem thêm qua file : Chuyên-Ngành-1 (1).docx <br/>
 
 
 ## Getting Started
