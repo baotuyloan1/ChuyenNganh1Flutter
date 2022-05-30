@@ -2,7 +2,6 @@
 
 1 app flutter(dart), kết hợp cùng web laravel <br/>
 
-
 chức năng đạt được : hầu hết chức năng cần thiết của 1 app bán hàng<br/>
 xem thêm qua file : Chuyên-Ngành-1 (1).docx <br/>
 
